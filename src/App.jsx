@@ -1,5 +1,9 @@
+// App.jsx
+
+import React from "react";
 import backgroundImg from "./assets/gradient.png";
-import Card from "./components/card";
+import Card from "./components/card";  // Change 'card' to 'Card'
+
 function App() {
   return (
     <div

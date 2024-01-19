@@ -1,15 +1,11 @@
-import { configureStore } from "@reduxjs/toolkit";
+// store.js
+import { configureStore } from '@reduxjs/toolkit';
+import todoReducer from '../store/features/todo/todoSlice';
 
-// Import the reducer for the 'todos' feature from the todoSlice file
-import todoReducer from "./features/todo/todoSlice";
-
-// Configure the Redux store using the configureStore function
 const store = configureStore({
-  // Define the root reducer, where 'todos' is a slice of the state managed by todoReducer
   reducer: {
-    todos: todoReducer,
+    todo: todoReducer,
   },
 });
-
 
 export default store;

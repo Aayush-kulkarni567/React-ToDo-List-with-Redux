@@ -1,23 +1,22 @@
+// UpdateTodoForm.jsx
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { todoUpdated } from "../store/features/todo/todoSlice";
+import { todoUpdated, setFilterStatus } from "../store/features/todo/todoSlice";
 
-// Functional component for updating a todo
 const UpdateTodoForm = () => {
-  // Redux dispatch function to dispatch actions
   const dispatch = useDispatch();
-  
+
   // Retrieve the todo to be updated from the Redux store
-  const todoToUpdate = useSelector((state) => state.todos.todoUpdate);
-  
+  const todoToUpdate = useSelector((state) => state.todo.todoUpdate);
+
   // State to manage the input value for updating the todo
-  const [update, setUpdate] = useState(todoToUpdate.name);
+  const [update, setUpdate] = useState(todoToUpdate?.name || '');
 
   // Function to handle form submission for updating the todo
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Check if the updated todo is empty or contains only spaces
     if (/^\s*$/.test(update)) {
       alert("Enter a todo");
@@ -27,15 +26,16 @@ const UpdateTodoForm = () => {
       // Dispatch the todoUpdated action with the updated todo object
       dispatch(
         todoUpdated({
-          id: todoToUpdate.id,   // Use the existing ID for the todo
-          name: update,          // Set the updated name for the todo
+          id: todoToUpdate.id,
+          name: update,
         })
       );
       setUpdate("");  // Clear the input field after updating the todo
+      // Add the following line to reset filter status after updating a todo
+      dispatch(setFilterStatus("all"));
     }
   };
 
-  // JSX for the update todo form
   return (
     <>
       {/* Form for updating the todo */}
@@ -60,6 +60,5 @@ const UpdateTodoForm = () => {
     </>
   );
 };
-
 
 export default UpdateTodoForm;

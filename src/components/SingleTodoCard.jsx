@@ -1,59 +1,52 @@
-// Import necessary dependencies and icons
-import { useState } from "react";
+// SingleTodoCard.jsx
+
+import React from "react";
+import { useDispatch } from "react-redux";
+import { toggleInputForm, todoDeleted, todoCompleted } from "../store/features/todo/todoSlice";
 import { BsTrashFill, BsCheckSquare } from "react-icons/bs";
 import { FaEdit } from "react-icons/fa";
 
-import { useDispatch, useSelector } from "react-redux";
-import { formToggled, todoDeleted, toggleInputForm } from "../store/features/todo/todoSlice";
-
-// Functional component for displaying a single todo card
-const SingleTodoCard = (props) => {
-  // State to manage the completion state of the todo
-  const [toggleComplete, setToggleComplete] = useState(false);
-
-  // Redux dispatch function to dispatch actions
+const SingleTodoCard = ({ name, id, completed }) => {
   const dispatch = useDispatch();
 
-  // JSX for the single todo card
+  const handleEditClick = () => {
+    dispatch(toggleInputForm({ id, name }));
+  };
+
+  const handleDeleteClick = () => {
+    dispatch(todoDeleted(id));
+  };
+
+  const handleCheckboxClick = () => {
+    dispatch(todoCompleted(id));
+  };
+
   return (
-    <div className="flex justify-between bg-red-100 py-2 rounded shadow">
+    <div className={`flex justify-between ${completed ? "bg-green-100" : "bg-red-100"} py-2 rounded shadow`}>
       <div className="px-4">
-        {/* Todo name with conditional styling for completion status */}
-        <h1
-          className={
-            toggleComplete ? "font-semibold line-through" : "font-semibold"
-          }
-        >
-          {props.name}
+        <h1 className={completed ? "font-semibold line-through text-green-700" : "font-semibold"}>
+          {name}
         </h1>
       </div>
       <div className="px-4 flex space-x-4">
-        {/* Icon for marking the todo as complete */}
         <BsCheckSquare
-          onClick={() => setToggleComplete(!toggleComplete)}
-          className="cursor-pointer text-green-700"
+          onClick={handleCheckboxClick}
+          className={`cursor-pointer text-${completed ? "green" : "red"}-700`}
           size={20}
         />
-        
-        {/* Icon for editing the todo */}
         <FaEdit
           className="cursor-pointer text-yellow-700"
           size={20}
-          onClick={() =>
-            dispatch(toggleInputForm({ id: props.id, name: props.name }))
-          }
+          onClick={handleEditClick}
         />
-        
-        {/* Icon for deleting the todo */}
         <BsTrashFill
           className="cursor-pointer text-red-700"
           size={20}
-          onClick={() => dispatch(todoDeleted(props.id))}
+          onClick={handleDeleteClick}
         />
       </div>
     </div>
   );
 };
-
 
 export default SingleTodoCard;
